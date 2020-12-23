@@ -1,5 +1,158 @@
 # Git Notes
 
+## Set Up
+Configure
+```bash
+git config --global user.name "First Last"
+git config --global user.email "first.last@emaildomain"
+git config --global push.default simple
+git config --global http.sslverify false
+git config --global core.autocrlf false
+git config --global alias.pull "pull --ff-only"
+git config --global core.pager "less -F -X"
+git config --global alias.logall "log --graph --decorate --pretty=oneline --abbrev-commit --all"
+```
+
+# Git Commands
+
+List All System Properties
+```bash
+git config --list --global
+```
+Stage the deletion of a file
+```bash
+git rm X
+```
+Get status of the git repo
+```bash
+git status -s
+```
+View the list of commits
+```bash
+git log --graph --oneline
+```
+Add an item to the staging area
+```bash
+git add X
+```
+Remove an item from the staging area but keep on disk
+```bash
+git rm --cached X
+```
+Remove an item from the staging area and remove from disk
+```bash
+git rm -f X
+```
+Update last commit with contents of stage, if stage is empty then update the comment of the last commit.
+```bash
+git commit --amend
+```
+Undo the last commit
+```bash
+git reset HEAD~1
+```
+Move file from stage back to working area
+```bash
+git reset HEAD X
+```
+Undo unstaged changes to file X
+```bash
+git checkout -- X
+```
+Remove modified and untracked files
+```bash
+git clean
+```
+Reset branch to BRANCH from origin
+```bash
+git fetch --all
+git reset --hard origin/BRANCH
+or
+git fetch --all
+git reset --hard FETCH_HEAD
+```
+View all branches
+```bash
+git branch -a
+```
+Checkout and create a branch locally
+```bash
+git checkout -b feature/remove-rce-gui
+```
+Push a branch that has been created locally and does not exist in the remote
+```bash
+git push --set-upstream origin feature/remove-rce-gui
+```
+Create a tracking branch
+```bash
+git branch --track bugfix/fixit origin/bugfix/fixit
+```
+Update your subbranch with changes made to master - this is done before creating a Pull Request
+```bash
+# From your feature/bugfix branch run the following
+git fetch origin master
+git rebase origin/master
+# Fix and merge issues and use git rebase --continue to complete the rebase
+git push -f
+```
+View all remotes
+```bash
+git remote -v 
+```
+View all tags
+```bash
+git tag
+```
+View all branches
+```bash
+git branch -a -v
+```
+Delete a remote
+```bash
+git remote rm
+```
+Delete a branch 
+```bash
+git branch -d
+```
+
+# Undoing and Fixing Git Commits
+Revert a commit by creating a commit that is the opposite of the given SHA
+```bash
+git revert <SHA>
+```
+Edit last commit message
+```bash
+git commit --amend
+or
+git commit --amend -m "New Commit Message"
+```
+Undo local changes that have not been committed yet
+```bash
+git checkout -- <edited file name>
+```
+Reset local changes that have been committed
+```bash
+git reset <last good SHA>
+```
+Reset local changes that have been committed and those local edits that have not been committed
+```bash
+git reset --hard <last good SHA>
+```
+## Git Reflog
+Use git reflog to get the history of HEAD label
+```bash
+$ git reflog
+0ff0b0d (HEAD -> master) HEAD@{0}: commit: second one edited again
+9b20920 HEAD@{1}: commit: third one
+d0cd17c HEAD@{2}: commit: second one
+f92cbc1 HEAD@{3}: commit (initial): first one
+```
+Use git reset <SHA> to move the head back to the commit that you want
+```bash
+git reset d0cd17c
+```
+
 ## The Blob
 <insert blob picture here>
 There are three types of blob.  
@@ -126,123 +279,3 @@ $
 Reset just moves a ref to somewhere else.  `git` records what you do to refs using the `reflog`.  Reflog is in your local repository only and has just the last 90 days' worth of changes in it. 
 
 Over time, commits are merged into pack files which is also how git sends data across networks.  
-
-# Git Commands
-
-List All System Properties
-```bash
-git config --list
-```
-Stage the deletion of a file
-```bash
-git rm X
-```
-Get status of the git repo
-```bash
-git status -s
-```
-View the list of commits
-```bash
-git log --graph --oneline
-```
-Add an item to the staging area
-```bash
-git add X
-```
-Remove an item from the staging area but keep on disk
-```bash
-git rm --cached X
-```
-Remove an item from the staging area and remove from disk
-```bash
-git rm -f X
-```
-Update last commit with contents of stage, if stage is empty then update the comment of the last commit.
-```bash
-git commit --amend
-```
-Undo the last commit
-```bash
-git reset HEAD~1
-```
-Move file from stage back to working area
-```bash
-git reset HEAD X
-```
-Undo unstaged changes to file X
-```bash
-git checkout -- X
-```
-Remove modified and untracked files
-```bash
-git clean
-```
-Reset branch to BRANCH from origin
-```bash
-git fetch --all
-git reset --hard origin/BRANCH
-or
-git fetch --all
-git reset --hard FETCH_HEAD
-```
-View all branches
-```bash
-git branch -a
-```
-Checkout and create a branch locally
-```bash
-git checkout -b feature/remove-rce-gui
-```
-Push a branch that has been created locally and does not exist in the remote
-```bash
-git push --set-upstream origin feature/remove-rce-gui
-```
-Create a tracking branch
-```bash
-git branch --track bugfix/fixit origin/bugfix/fixit
-```
-Update your subbranch with changes made to master - this is done before creating a Pull Request
-```bash
-# From your feature/bugfix branch run the following
-git fetch origin master
-git rebase origin/master
-# Fix and merge issues and use git rebase --continue to complete the rebase
-git push -f
-```
-
-# Undoing and Fixing Git Commits
-Revert a commit by creating a commit that is the opposite of the given SHA
-```bash
-git revert <SHA>
-```
-Edit last commit message
-```bash
-git commit --amend
-or
-git commit --amend -m "New Commit Message"
-```
-Undo local changes that have not been committed yet
-```bash
-git checkout -- <edited file name>
-```
-Reset local changes that have been committed
-```bash
-git reset <last good SHA>
-```
-Reset local changes that have been committed and those local edits that have not been committed
-```bash
-git reset --hard <last good SHA>
-```
-## Git Reflog
-Use git reflog to get the history of HEAD label
-```bash
-$ git reflog
-0ff0b0d (HEAD -> master) HEAD@{0}: commit: second one edited again
-9b20920 HEAD@{1}: commit: third one
-d0cd17c HEAD@{2}: commit: second one
-f92cbc1 HEAD@{3}: commit (initial): first one
-```
-Use git reset <SHA> to move the head back to the commit that you want
-```bash
-git reset d0cd17c
-```
